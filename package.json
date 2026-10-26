@@ -1,0 +1,15 @@
+{
+  "name": "recallframe",
+  "private": true,
+  "packageManager": "pnpm@10.28.1",
+  "scripts": {
+    "dev": "pnpm --filter web dev",
+    "build": "pnpm --filter web build",
+    "lint": "pnpm --filter web lint",
+    "typecheck": "pnpm --filter web exec -- tsc --noEmit",
+    "test": "pnpm --filter web test && python -m pytest services/api/tests -q",
+    "generate:api": "python services/api/export_openapi.py && pnpm --filter web generate:api",
+    "format:check": "pnpm --filter web exec -- prettier --check .",
+    "verify": "pnpm lint && pnpm typecheck && pnpm test && pnpm build"
+  }
+}
