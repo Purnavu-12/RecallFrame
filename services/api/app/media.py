@@ -79,3 +79,26 @@ def make_video_chunk(video_path: Path, output_path: Path, start_ms: int, duratio
     # Low-resolution, silent visual samples limit transfer size and avoid re-sending audio.
     subprocess.run(["ffmpeg", "-nostdin", "-y", "-ss", f"{start_ms / 1000:.3f}", "-i", str(video_path), "-t", f"{duration_ms / 1000:.3f}", "-vf", "fps=1/10,scale=720:-2", "-an", "-c:v", "libx264", "-preset", "veryfast", "-crf", "30", "-movflags", "+faststart", str(output_path)], check=True, capture_output=True, timeout=900)
 
+
+def sample_video_frames(video_path: Path, output_dir: Path, duration_ms: int, frame_interval_ms: int = 10_000) -> list[dict]:
+    """Extract deterministic, timestamp-ordered JPEG evidence frames from a video chunk."""
+    if duration_ms <= 0 or frame_interval_ms <= 0:
+        raise ValueError("Video duration and frame interval must be positive.")
+    output_dir.mkdir(parents=True, exist_ok=True)
+    pattern = output_dir / "frame-%03d.jpg"
+    subprocess.run(
+        [
+            "ffmpeg", "-nostdin", "-v", "error", "-y", "-i", str(video_path),
+            "-vf", f"fps=1/{frame_interval_ms / 1000:g},scale=512:-2",
+            "-frames:v", str((duration_ms + frame_interval_ms - 1) // frame_interval_ms),
+            "-q:v", "6", str(pattern),
+        ],
+        check=True,
+        capture_output=True,
+        timeout=300,
+    )
+    frames = []
+    for index, path in enumerate(sorted(output_dir.glob("frame-*.jpg"))):
+        frames.append({"frame_index": index, "offset_ms": index * frame_interval_ms, "path": path})
+    return frames
+

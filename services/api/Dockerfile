@@ -13,6 +13,10 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir --index-url https://download.pytorch.org/whl/cpu "torch==2.14.1"
 RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
-RUN mkdir -p /data/media
+ENV HF_HOME=/home/recallframe/.cache/huggingface
+RUN useradd --uid 10001 --create-home --shell /usr/sbin/nologin recallframe \
+    && mkdir -p /data/media "$HF_HOME" \
+    && chown -R recallframe:recallframe /data/media /home/recallframe
+USER recallframe
 EXPOSE 8000
 CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]

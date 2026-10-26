@@ -114,7 +114,7 @@ def process_video(self, video_id: str) -> dict:
                 clip = temp_root / f"chunk-{start_ms}.mp4"
                 make_video_chunk(source_path, clip, start_ms, chunk_duration)
                 frame_prefix = f"{video_id}:{start_ms}"
-                result = client.analyze_video_chunk(str(clip), "data:video/mp4", chunk_segments, chunk_duration, frame_prefix=frame_prefix)
+                result = client.analyze_video_chunk(str(clip), chunk_segments, chunk_duration, frame_prefix=frame_prefix)
                 allowed_segment_ids = {item["id"] for item in chunk_segments}
                 for chapter in result.get("chapters", []):
                     if chapter.get("evidence_ids") and set(chapter["evidence_ids"]) <= allowed_segment_ids:

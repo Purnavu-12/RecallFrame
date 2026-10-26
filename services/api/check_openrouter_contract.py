@@ -1,4 +1,4 @@
-"""Explicitly test the configured provider's video + JSON Schema contract."""
+"""Explicitly test the configured provider's sampled-frame + JSON Schema contract."""
 import argparse
 from pathlib import Path
 
@@ -25,14 +25,13 @@ def main() -> None:
     print("Do not send personal or confidential content; NVIDIA may log submissions for service improvement.")
     if input("Type SEND to continue: ").strip() != "SEND":
         raise SystemExit("Contract check cancelled.")
-    mime = {".mp4": "data:video/mp4", ".mov": "data:video/mov", ".webm": "data:video/webm"}[args.clip.suffix.lower()]
     response = OpenRouterClient().analyze_video_chunk(
-        str(args.clip), mime, [], 15_000, frame_prefix="contract_check"
+        str(args.clip), [], 15_000, frame_prefix="contract_check"
     )
     required = {"chapters", "takeaways", "visual_notes", "concepts"}
     if not required <= response.keys() or not all(isinstance(response[key], list) for key in required):
         raise SystemExit("The provider returned a response outside the expected structured schema.")
-    print(f"Video + JSON Schema contract verified for {settings.openrouter_model}.")
+    print(f"Sampled-frame + JSON Schema contract verified for {settings.openrouter_model}.")
 
 
 if __name__ == "__main__":

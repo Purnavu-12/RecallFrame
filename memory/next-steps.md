@@ -1,7 +1,6 @@
 # Next steps
 
-1. Finish Python and frontend tests and resolve all errors/warnings.
-2. Validate the generated OpenAPI contract and derive the TypeScript client from it.
-3. Start Compose with Docker Desktop, migrate the database, and run API/browser integration checks.
-4. Add a rights-cleared demo fixture and a small labeled evaluation set; keep it visibly distinct from live processing.
-5. Verify OpenRouter video+JSON output with a configured key and confirm provider limits/rate behavior.
+1. Add a small rights-cleared, human-labeled evaluation set and report measured retrieval/citation results without claiming unmeasured accuracy.
+2. Tune and evaluate takeaway generation; the current YouTube analysis produced none despite valid transcript evidence and a successful grounded answer.
+3. Investigate alternate speech detection/transcription for the SwiftBuild promo, which yielded no Whisper segments.
+4. Replace the deprecated httpx-backed FastAPI `TestClient` setup with the supported test transport when upgrading the test stack.

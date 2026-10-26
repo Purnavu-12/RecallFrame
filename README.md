@@ -13,7 +13,7 @@ The web port is bound to loopback. The API, PostgreSQL, and Redis are internal t
 
 The **Try preprocessed demo** page is an illustrative walkthrough separate from your library. Its transcript, diagram, timestamps, and answer are authored sample data; no source video was processed and no model inference ran for that page. This keeps the demo distinct from indexed, evidence-backed content.
 
-To explicitly live-check the selected provider’s video and structured-output contract, place a short, non-sensitive clip in the private media volume and run `docker compose exec worker python check_openrouter_contract.py /data/media/short-nonsensitive-clip.mp4`. The script limits the clip to 15 seconds, prints the external data notice, and requires typing `SEND`; use media you have permission to send. External inference has not been verified unless this check completes successfully.
+To explicitly live-check the selected provider’s sampled-frame and structured-output contract, place a short, non-sensitive clip in the private media volume and run `docker compose exec worker python check_openrouter_contract.py /data/media/short-nonsensitive-clip.mp4`. The script limits the clip to 15 seconds, prints the external data notice, and requires typing `SEND`; use media you have permission to send. Video chunks are compressed locally, then deterministic timestamped JPEG frames and the matching transcript context are sent to Nemotron. This image-based path avoids the OpenRouter video route’s current $1 minimum-balance requirement.
 
 ## Data and model notice
 
@@ -25,7 +25,7 @@ Speech transcription, embeddings, and retrieval run locally. For video analysis 
 - FastAPI, PostgreSQL 18 with pgvector, Redis, Celery, and Alembic.
 - FFprobe/FFmpeg validation and media preparation; faster-whisper `small` on CPU int8.
 - Local multilingual MiniLM embeddings, PostgreSQL full-text search, cosine retrieval, and reciprocal-rank fusion.
-- OpenRouter video requests use compressed five-minute clips and structured output. Provider limits and free-tier availability may change.
+- OpenRouter visual analysis uses compressed five-minute clips, deterministic timestamped JPEG frames, transcript context, and structured output. Provider limits and free-tier availability may change.
 
 ## Verification
 
