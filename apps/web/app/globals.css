@@ -806,6 +806,8 @@ h1 {
   white-space: nowrap;
 }
 .demo-empty-link {
+  display: block;
+  margin-top: 12px;
   color: #c4a9ff;
   font-size: 11px;
   text-decoration: none;
