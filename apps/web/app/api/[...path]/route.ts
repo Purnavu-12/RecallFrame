@@ -8,9 +8,15 @@ async function proxy(
   context: { params: Promise<{ path: string[] }> },
 ) {
   const requestOrigin = request.headers.get("origin");
+  // `nextUrl.origin` is Next's container listener origin (0.0.0.0:3000)
+  // in Docker, not the browser-facing loopback host and port.
+  const host = request.headers.get("host");
+  const publicOrigin = host
+    ? `${request.nextUrl.protocol}//${host}`
+    : request.nextUrl.origin;
   if (
     requestOrigin &&
-    requestOrigin !== request.nextUrl.origin &&
+    requestOrigin !== publicOrigin &&
     request.method !== "GET" &&
     request.method !== "HEAD"
   ) {

@@ -317,7 +317,7 @@ export default function VideoWorkspacePage() {
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                     allowFullScreen
                   />
-                ) : video.status === "ready" ? (
+                ) : video.source_type === "upload" ? (
                   <video
                     ref={videoRef}
                     controls

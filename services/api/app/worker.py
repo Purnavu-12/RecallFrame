@@ -202,6 +202,8 @@ def process_video(self, video_id: str) -> dict:
             snapshot = transition(JobSnapshot(job.status, job.stage, job.retry_count), "failed")
             if isinstance(exc, ProviderError) and "not configured" in str(exc).lower():
                 message = "OpenRouter is not configured. Add OPENROUTER_API_KEY to .env, restart the stack, then retry this source."
+            elif isinstance(exc, ProviderError) and "(402)" in str(exc):
+                message = "OpenRouter returned HTTP 402. Check the account balance and API key credit limit, then retry. The source and completed local transcript remain stored on this device."
             elif isinstance(exc, yt_dlp.utils.DownloadError):
                 message = "The YouTube source could not be downloaded. It may be unavailable or restricted; verify it is public, then retry."
             else:
